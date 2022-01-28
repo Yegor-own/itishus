@@ -1,54 +1,38 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url('/') }}">
-            Админка
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"aria-label="{{ __('Toggle navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto bg-dark">
-                <li class="nav-item">
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Создать
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('home') }}">
-                                Событие
-                            </a>
-                            <a class="dropdown-item" href="{{ route('home') }}">
-                                Курс
-                            </a>
-                        </div>
-                    </div>
+<nav>
+    <ul>
+        <li>
+            <a href="/">{{ __('Itishus') }}</a>
+        </li>
+        @guest
+            @if (Route::has('login'))
+                <li>
+                    <a href="{{ route('login') }}">{{ __('Войти') }}</a>
                 </li>
-            </ul>
-            <div class="dropdown">
-                <div class="btn-group">
-                    <a type="button" class="btn btn-secondary" href="{{ route('home') }}">{{ Auth::user()->name }}</a>
-                    <a type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split d-flex align-items-center" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                        <span class="sr-only">Toggle Dropdown</span>
+            @endif
+            @if (Route::has('register'))
+                <li>
+                    <a href="{{ route('register') }}">{{ __('Зарегистрироваться') }}</a>
+                </li>
+            @endif
+        @else
+            <li>
+                <a href="{{ route('home') }}">{{ Auth::user()->name }}</a>
+                <div class="dropdown">
+                    @if (Auth::user()->isadmin)
+                        <a href="{{ route('admin') }}">Админка</a>
+                    @endif
+                    <a href="{{ route('home') }}">Ваши курсы</a>
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                        Выйти
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/">
-                            Главная
-                        </a>
-                        <a class="dropdown-item" href="{{ route('admin') }}">
-                            Админка
-                        </a>
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
-                            Выйти
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </div>
-            </div>
-        </div>
-    </div>
+            </li>
+        @endguest
+    </ul>
 </nav>
+
