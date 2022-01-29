@@ -7,8 +7,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/verify', function () {
-    return view('auth.verify');
+Route::get('/game', function () {
+    return view('game');
 });
 
 

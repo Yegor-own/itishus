@@ -1,0 +1,16 @@
+{
+"companyName": "DefaultCompany",
+"productName": "itShoos2",
+"productVersion": "1.0",
+"dataUrl": "ItShoos.data.unityweb",
+"wasmCodeUrl": "ItShoos.wasm.code.unityweb",
+"wasmFrameworkUrl": "ItShoos.wasm.framework.unityweb",
+"graphicsAPI": ["WebGL 2.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20",
+"cacheControl": {"default": "must-revalidate"},
+"developmentBuild": false,
+"multithreading": false,
+"unityVersion": "2019.4.34f1"
+}
