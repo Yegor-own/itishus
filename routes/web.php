@@ -12,8 +12,10 @@ Route::get('/game', function () {
 });
 
 
-Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
+Route::get('/admin', 'AdminController@imdex')->name('admin');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/game', 'GameController@store');
+
