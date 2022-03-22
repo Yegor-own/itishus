@@ -19,9 +19,12 @@
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.32.11",
         "sass-loader": "^11.0.1",
-        "tailwindcss": "^3.0.17",
+        "tailwindcss": "^3.0.23",
         "vue": "^2.6.12",
         "vue-loader": "^17.0.0",
         "vue-template-compiler": "^2.6.12"
+    },
+    "dependencies": {
+        "-": "^0.0.1"
     }
 }

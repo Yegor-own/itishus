@@ -32,25 +32,25 @@ class DatabaseSeeder extends Seeder
             'content'=>'Some quick example text to build on the card title and make up the bulk of the cards content.'
         ]);
         Video::create([
-            'course_id' => $course1->id,
+            'course_id' => $course3->id,
             'video_link' => 'U7-6UXrxx64',
             'title' => 'Title',
             'content' => 'Some quick example text to build on the card title and make up the bulk of the cards content.'
         ]);
         Video::create([
-            'course_id' => $course1->id,
+            'course_id' => $course3->id,
             'video_link' => 'U7-6UXrxx64',
             'title' => 'Title',
             'content' => 'Some quick example text to build on the card title and make up the bulk of the cards content.'
         ]);
         Video::create([
-            'course_id' => $course1->id,
+            'course_id' => $course3->id,
             'video_link' => 'U7-6UXrxx64',
             'title' => 'Title',
             'content' => 'Some quick example text to build on the card title and make up the bulk of the cards content.'
         ]);
         Video::create([
-            'course_id' => $course1->id,
+            'course_id' => $course3->id,
             'video_link' => 'U7-6UXrxx64',
             'title' => 'Title',
             'content' => 'Some quick example text to build on the card title and make up the bulk of the cards content.'

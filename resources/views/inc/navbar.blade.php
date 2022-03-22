@@ -16,12 +16,15 @@
         @endif
         @else
             <li class="nav-item">
+                <a class="nav-link" href="/courses">{{ __('Курсы') }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/events">{{ __('Мероприятия') }}</a>
+            </li>
+            @yield('tabs')
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('home') }}">{{ Auth::user()->name }}</a>
                 <div class="dropdown">
-                    @if (Auth::user()->isadmin)
-                        <a class="nav-link" href="{{ route('admin') }}">Админка</a>
-                    @endif
-                    <a class="nav-link" href="{{ route('home') }}">Ваши курсы</a>
                     <a class="nav-link" href="{{ route('logout') }}"
                        onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
@@ -32,10 +35,6 @@
                     </form>
                 </div>
             </li>
-            @yield('tabs')
         @endguest
-        <li class="nav-item">
-            <a class="nav-link" href="/courses">{{ __('Курсы') }}</a>
-        </li>
     </ul>
 </nav>

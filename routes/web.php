@@ -11,8 +11,11 @@ Route::get('/game', function () {
     return view('game');
 });
 
-Route::get('/courses', 'CourseController@list');
-Route::get('/courses/{course}', 'CourseController@read');
+//Route::resource('courses.videos', 'VideoController',
+//    ['only' => ['index', 'show']]);
+Route::get('/courses', 'CourseController@index');
+Route::get('/courses/{course_id}/video/', 'VideoController@index');
+Route::get('/courses/{course_id}/video/{video_id}/', 'VideoController@show')->name('video');
 
 
 Route::get('/admin', 'AdminController@imdex')->name('admin');
