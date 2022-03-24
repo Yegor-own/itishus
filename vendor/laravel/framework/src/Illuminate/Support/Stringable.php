@@ -131,6 +131,18 @@ class Stringable implements JsonSerializable
     }
 
     /**
+     * Get the smallest possible portion of a string between two given values.
+     *
+     * @param  string  $from
+     * @param  string  $to
+     * @return static
+     */
+    public function betweenFirst($from, $to)
+    {
+        return new static(Str::betweenFirst($this->value, $from, $to));
+    }
+
+    /**
      * Convert a value to camel case.
      *
      * @return static
@@ -143,7 +155,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param  string|array  $needles
+     * @param  string|string[]  $needles
      * @return bool
      */
     public function contains($needles)
@@ -176,7 +188,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string ends with a given substring.
      *
-     * @param  string|array  $needles
+     * @param  string|string[]  $needles
      * @return bool
      */
     public function endsWith($needles)
@@ -193,6 +205,18 @@ class Stringable implements JsonSerializable
     public function exactly($value)
     {
         return $this->value === $value;
+    }
+
+    /**
+     * Extracts an excerpt from text that matches the first instance of a phrase.
+     *
+     * @param  string  $phrase
+     * @param  array  $options
+     * @return string|null
+     */
+    public function excerpt($phrase = '', $options = [])
+    {
+        return Str::excerpt($this->value, $phrase, $options);
     }
 
     /**
@@ -444,7 +468,7 @@ class Stringable implements JsonSerializable
      */
     public function pipe(callable $callback)
     {
-        return new static(call_user_func($callback, $this));
+        return new static($callback($this));
     }
 
     /**
@@ -510,7 +534,7 @@ class Stringable implements JsonSerializable
      */
     public function repeat(int $times)
     {
-        return new static(Str::repeat($this->value, $times));
+        return new static(str_repeat($this->value, $times));
     }
 
     /**
@@ -522,7 +546,7 @@ class Stringable implements JsonSerializable
      */
     public function replace($search, $replace)
     {
-        return new static(Str::replace($search, $replace, $this->value));
+        return new static(str_replace($search, $replace, $this->value));
     }
 
     /**
@@ -576,6 +600,17 @@ class Stringable implements JsonSerializable
         }
 
         return new static(preg_replace($pattern, $replace, $this->value, $limit));
+    }
+
+    /**
+     * Parse input from a string to a collection, according to a format.
+     *
+     * @param  string  $format
+     * @return \Illuminate\Support\Collection
+     */
+    public function scan($format)
+    {
+        return collect(sscanf($this->value, $format));
     }
 
     /**
@@ -666,7 +701,7 @@ class Stringable implements JsonSerializable
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param  string|array  $needles
+     * @param  string|string[]  $needles
      * @return bool
      */
     public function startsWith($needles)
@@ -715,11 +750,22 @@ class Stringable implements JsonSerializable
      * @param  string|array  $replace
      * @param  array|int  $offset
      * @param  array|int|null  $length
-     * @return string|array
+     * @return static
      */
     public function substrReplace($replace, $offset = 0, $length = null)
     {
         return new static(Str::substrReplace($this->value, $replace, $offset, $length));
+    }
+
+    /**
+     * Swap multiple keywords in a string with other keywords.
+     *
+     * @param  array  $map
+     * @return static
+     */
+    public function swap(array $map)
+    {
+        return new static(strtr($this->value, $map));
     }
 
     /**
@@ -756,6 +802,16 @@ class Stringable implements JsonSerializable
     }
 
     /**
+     * Make a string's first character lowercase.
+     *
+     * @return static
+     */
+    public function lcfirst()
+    {
+        return new static(Str::lcfirst($this->value));
+    }
+
+    /**
      * Make a string's first character uppercase.
      *
      * @return static
@@ -766,37 +822,152 @@ class Stringable implements JsonSerializable
     }
 
     /**
+     * Split a string by uppercase characters.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function ucsplit()
+    {
+        return collect(Str::ucsplit($this->value));
+    }
+
+    /**
+     * Execute the given callback if the string contains a given substring.
+     *
+     * @param  string|string[]  $needles
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenContains($needles, $callback, $default = null)
+    {
+        return $this->when($this->contains($needles), $callback, $default);
+    }
+
+    /**
+     * Execute the given callback if the string contains all array values.
+     *
+     * @param  array  $needles
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenContainsAll(array $needles, $callback, $default = null)
+    {
+        return $this->when($this->containsAll($needles), $callback, $default);
+    }
+
+    /**
      * Execute the given callback if the string is empty.
      *
      * @param  callable  $callback
+     * @param  callable|null  $default
      * @return static
      */
-    public function whenEmpty($callback)
+    public function whenEmpty($callback, $default = null)
     {
-        if ($this->isEmpty()) {
-            $result = $callback($this);
-
-            return is_null($result) ? $this : $result;
-        }
-
-        return $this;
+        return $this->when($this->isEmpty(), $callback, $default);
     }
 
     /**
      * Execute the given callback if the string is not empty.
      *
      * @param  callable  $callback
+     * @param  callable|null  $default
      * @return static
      */
-    public function whenNotEmpty($callback)
+    public function whenNotEmpty($callback, $default = null)
     {
-        if ($this->isNotEmpty()) {
-            $result = $callback($this);
+        return $this->when($this->isNotEmpty(), $callback, $default);
+    }
 
-            return is_null($result) ? $this : $result;
-        }
+    /**
+     * Execute the given callback if the string ends with a given substring.
+     *
+     * @param  string|string[]  $needles
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenEndsWith($needles, $callback, $default = null)
+    {
+        return $this->when($this->endsWith($needles), $callback, $default);
+    }
 
-        return $this;
+    /**
+     * Execute the given callback if the string is an exact match with the given value.
+     *
+     * @param  string  $value
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenExactly($value, $callback, $default = null)
+    {
+        return $this->when($this->exactly($value), $callback, $default);
+    }
+
+    /**
+     * Execute the given callback if the string matches a given pattern.
+     *
+     * @param  string|array  $pattern
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenIs($pattern, $callback, $default = null)
+    {
+        return $this->when($this->is($pattern), $callback, $default);
+    }
+
+    /**
+     * Execute the given callback if the string is 7 bit ASCII.
+     *
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenIsAscii($callback, $default = null)
+    {
+        return $this->when($this->isAscii(), $callback, $default);
+    }
+
+    /**
+     * Execute the given callback if the string is a valid UUID.
+     *
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenIsUuid($callback, $default = null)
+    {
+        return $this->when($this->isUuid(), $callback, $default);
+    }
+
+    /**
+     * Execute the given callback if the string starts with a given substring.
+     *
+     * @param  string|string[]  $needles
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenStartsWith($needles, $callback, $default = null)
+    {
+        return $this->when($this->startsWith($needles), $callback, $default);
+    }
+
+    /**
+     * Execute the given callback if the string matches the given pattern.
+     *
+     * @param  string  $pattern
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenTest($pattern, $callback, $default = null)
+    {
+        return $this->when($this->test($pattern), $callback, $default);
     }
 
     /**
@@ -819,6 +990,18 @@ class Stringable implements JsonSerializable
     public function wordCount()
     {
         return str_word_count($this->value);
+    }
+
+    /**
+     * Wrap the string with the given strings.
+     *
+     * @param  string  $before
+     * @param  string|null  $after
+     * @return static
+     */
+    public function wrap($before, $after = null)
+    {
+        return new static($before.$this->value.($after ??= $before));
     }
 
     /**
@@ -856,12 +1039,31 @@ class Stringable implements JsonSerializable
     }
 
     /**
+     * Get the underlying string value.
+     *
+     * @return string
+     */
+    public function value()
+    {
+        return $this->toString();
+    }
+
+    /**
+     * Get the underlying string value.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return $this->value;
+    }
+
+    /**
      * Convert the object to a string when JSON encoded.
      *
      * @return string
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): string
     {
         return $this->__toString();
     }

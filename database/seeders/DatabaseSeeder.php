@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Course;
 use App\Models\Video;
+use App\Models\User;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $course1= Course::create([
+        User::create([
+            'name'=>'Ilya',
+            'email'=>'ilya@email.com',
+            'password'=>Hash::make('secret')
+        ]);
+        $course1 = Course::create([
             'img'=>'ukno.jpg',
             'content'=>'Some quick example text to build on the card title and make up the bulk of the cards content.'
         ]);

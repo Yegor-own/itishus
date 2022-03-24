@@ -21,6 +21,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="/events">{{ __('Мероприятия') }}</a>
             </li>
+            @if (Auth::user()->is_admin)
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/dashboard">{{ __('Админка') }}</a>
+                </li>
+            @endif
             @yield('tabs')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('home') }}">{{ Auth::user()->name }}</a>

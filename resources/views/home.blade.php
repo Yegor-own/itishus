@@ -18,7 +18,9 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <div class="alert alert-primary" role="alert">
+                        Ваш ID {{ Auth::user()->id }}
+                    </div>
                 </div>
             </div>
         </div>

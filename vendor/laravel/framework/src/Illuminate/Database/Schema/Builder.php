@@ -3,6 +3,7 @@
 namespace Illuminate\Database\Schema;
 
 use Closure;
+use Illuminate\Container\Container;
 use Illuminate\Database\Connection;
 use InvalidArgumentException;
 use LogicException;
@@ -380,20 +381,7 @@ class Builder
             return call_user_func($this->resolver, $table, $callback, $prefix);
         }
 
-        return new Blueprint($table, $callback, $prefix);
-    }
-
-    /**
-     * Register a custom Doctrine mapping type.
-     *
-     * @param  string  $class
-     * @param  string  $name
-     * @param  string  $type
-     * @return void
-     */
-    public function registerCustomDoctrineType($class, $name, $type)
-    {
-        $this->connection->registerDoctrineType($class, $name, $type);
+        return Container::getInstance()->make(Blueprint::class, compact('table', 'callback', 'prefix'));
     }
 
     /**
