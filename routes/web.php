@@ -13,13 +13,16 @@ Route::get('/game', function () {
     return view('game');
 });
 
+Route::resource('courses', CourseController::class)
+    ->middleware('auth');
+
+Route::get('/courses/{course_id}/videos/list', [CourseVideoController::class, 'list']);
 Route::resource('courses.videos', CourseVideoController::class)
     ->scoped(['video'=>'slug'])
     ->middleware('auth');
 
-Route::resource('/courses', CourseController::class)
-    ->only(['index', 'create', 'store', 'edit', 'update',  'destroy'])
-    ->middleware('auth');
+
+// Route::post('/courses', [CourseController::class, 'store']);
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/dashboard', 'dashboard')->middleware('auth');

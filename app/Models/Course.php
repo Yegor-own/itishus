@@ -9,8 +9,17 @@ class Course extends Model
 {
     use HasFactory;
 
-    public function video ()
+    public function videos()
     {
         return $this->hasMany(Video::class);
     }
+
+    // public static function boot() {
+    //     parent::boot();
+
+    //     static::deleting(function($course) { // before delete() method call this
+    //          $course->video()->delete();
+    //          // do the rest of the cleanup...
+    //     });
+    // }
 }

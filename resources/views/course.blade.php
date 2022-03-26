@@ -10,7 +10,7 @@
             <div class="col-md-4">
                 <div class="list-group">
                     @foreach($videos_list as $video_id)
-                    <a href="{{ url('/courses/'.$course_id.'/video/'.$video_id->id.'/') }}" class="list-group-item">{{ $video_id->title }}</a>
+                    <a href="{{ url('/courses/'.$course_id.'/videos/'.$video_id->id.'/') }}" class="list-group-item">{{ $video_id->title }}</a>
                     @endforeach
                 </div>
             </div>

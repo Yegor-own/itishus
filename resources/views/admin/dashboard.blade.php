@@ -18,7 +18,13 @@
                     <div class="card-body">
                         <p class="card-text">{{ $course->content }}</p>
                     </div>
-                    <a href="{{ url('/courses/'.$course->id.'/edit') }}" class="btn btn-primary">Редактировать</a>
+                    <a href="{{ url('/courses/'.$course->id.'/edit') }}" class="btn btn-primary m-2">Редактировать</a>
+                    <a href="{{ url('/courses/'.$course->id.'/videos/list') }}" class="btn btn-warning m-2 ">Редактировать содержимое</a>
+                    <form action="{{ url('courses/'.$course->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger m-2" type="submit">Удалить весь курс</button>
+                    </form>
                 </div>
             @endforeach
         </div>

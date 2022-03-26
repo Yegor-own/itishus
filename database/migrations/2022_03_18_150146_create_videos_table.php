@@ -15,7 +15,8 @@ class CreateVideosTable extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id');
+            $table->foreignId('course_id')->references('id')->on('courses')
+                ->onDelete('cascade');
             $table->text('video_link');
             $table->text('title');
             $table->text('content');

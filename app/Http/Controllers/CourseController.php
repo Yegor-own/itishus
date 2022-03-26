@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +30,7 @@ class CourseController extends Controller
     public function create()
     {
         return view('admin.course.create');
+        // return 'create';
     }
 
     /**
@@ -39,19 +41,16 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->is_admin) {
-            $request->validate([
-                'img' => ['image', 'required'],
-                'content' => 'required'
-            ]);
-            $path = $request->img->store('img', 'public');
-            $course = new Course;
-            $course->content = $request->content;
-            $course->img = $path;
-            $course->save();    
-        }
-        return redirect('/courses/');
-        
+        $request->validate([
+            'img' => 'required',
+            'content' => 'required'
+        ]);
+        $path = $request->img->store('img', 'public');
+        $course = new Course;
+        $course->content = $request->content;
+        $course->img = $path;
+        $course->save();    
+        return redirect('/courses/'); 
     }
 
     /**
@@ -116,8 +115,9 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Course $course)
     {
-        //
+        $course->delete();
+        return redirect('/admin/dashboard');
     }
 }
